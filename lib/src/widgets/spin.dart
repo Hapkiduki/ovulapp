@@ -3,26 +3,42 @@ import 'dart:math';
 import 'package:ovulapp/src/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class Spin extends StatefulWidget {
-  final double percentage;
+class Spin extends StatelessWidget {
+  final int day, lastDay;
 
-  Spin({@required this.percentage});
+  Spin({
+    @required this.day,
+    this.lastDay = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 250,
+      height: 250,
+      child: _CustomSpin(this.day, this.lastDay),
+    );
+  }
+}
+
+class _CustomSpin extends StatefulWidget {
+  final int day, lastDay;
+
+  _CustomSpin(this.day, this.lastDay);
 
   @override
   _SpinState createState() => _SpinState();
 }
 
-class _SpinState extends State<Spin>
+class _SpinState extends State<_CustomSpin>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
-  double lastPercentage;
   Animation<double> effect;
 
   @override
   void initState() {
     controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: 3000));
-    lastPercentage = 20;
     effect = Tween(begin: 0.0, end: pi / 60)
         .animate(CurvedAnimation(parent: controller, curve: Curves.elasticIn));
 
@@ -38,20 +54,15 @@ class _SpinState extends State<Spin>
   @override
   Widget build(BuildContext context) {
     controller.forward(from: 0.0);
+    final int porcentejeAnterior = widget.lastDay;
 
     return AnimatedBuilder(
       animation: controller,
       builder: (BuildContext context, Widget child) {
-        
-        double porcentaje = 8.0;
-        final double porcentejeAnterior = 6.0;
         double porcentajeFinal =
-            (porcentaje - porcentejeAnterior) * effect.value;
-        print('Calculo: ${porcentaje - porcentejeAnterior}');
+            (widget.day - porcentejeAnterior) * effect.value;
         final double valorAnterior = (pi / 60) * porcentejeAnterior;
-        print('Valor ${pi / 60}');
-        print('Valor Anterior $valorAnterior');
-        double point = (120 / 25);
+        double point = (120 / 28);
         double angle = (valorAnterior + porcentajeFinal) * point;
 
         return Transform.rotate(
