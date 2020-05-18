@@ -5,18 +5,40 @@ import 'package:flutter/material.dart';
 
 class Spin extends StatelessWidget {
   final int day, lastDay;
+  final Widget child;
 
   Spin({
     @required this.day,
     this.lastDay = 0,
+    this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250,
-      height: 250,
-      child: _CustomSpin(this.day, this.lastDay),
+    return Stack(
+      children: <Widget>[
+        Container(
+          width: 250,
+          height: 250,
+          child: _CustomSpin(this.day, this.lastDay),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.pink,
+                spreadRadius: -30,
+                blurRadius: 50.0,
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 70),
+          width: 250,
+          height: 250,
+          child: this.child,
+        ),
+      ],
     );
   }
 }
